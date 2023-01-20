@@ -1,6 +1,7 @@
 let bgImg;
 let centerImg;
 let cornerImg;
+let rightImage;
 let pathImage = "image/";
 let food;
 let shower;
@@ -27,6 +28,7 @@ function preload() {
     score  = loadImage(pathImage+"score.png");
     idea = loadImage(pathImage+"idea.png");
     centerImg2 = loadImage(pathImage+"happy.png");
+    rightImage = loadImage(pathImage+"coin.png");
     currentImg = centerImg1;
 }
 
@@ -61,6 +63,7 @@ function showNote() {
     background(bgImg);
     image(centerImg1, width/5 , height/3.5, centerImg1.width , centerImg1.height/2);
     console.log("width", width/5)
+    image(rightImage, width - rightImage.width, height - rightImage.height);
     
     // create an invisible rectangle on top of the corner image
     //Top
@@ -92,6 +95,8 @@ function showNoteTochange(centerImg12) {
     removeElements() 
     background(bgImg);
     image(centerImg12, width/5 , height/3.5, centerImg12.width , centerImg12.height/2);
+    image(rightImage, width - rightImage.width, height - rightImage.height);
+    
     console.log("width", width/5)
     
     // create an invisible rectangle on top of the corner image
