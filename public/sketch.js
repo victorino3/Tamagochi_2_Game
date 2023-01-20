@@ -33,7 +33,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(900, 900);
+  createCanvas(1000, 1000);
   background(153,217,234);
 
   // create input field for username
@@ -63,7 +63,8 @@ function showNote() {
     background(bgImg);
     image(centerImg1, width/5 , height/3.5, centerImg1.width , centerImg1.height/2);
     console.log("width", width/5)
-    image(rightImage, width - rightImage.width, height - rightImage.height);
+    image(rightImage, width - rightImage.width,rightImage.height - 90);
+    text("You have " + availableMoney + " $ ", width - rightImage.width, rightImage.height+30);
     
     // create an invisible rectangle on top of the corner image
     //Top
@@ -88,15 +89,15 @@ function showNote() {
     //play
 
 
-    noFill();
+   // noFill();
     document.getElementById('defaultCanvas0').addEventListener("mousedown", changeCenterImg);
   }
 function showNoteTochange(centerImg12) {
     removeElements() 
     background(bgImg);
     image(centerImg12, width/5 , height/3.5, centerImg12.width , centerImg12.height/2);
-    image(rightImage, width - rightImage.width, height - rightImage.height);
-    
+    image(rightImage, width - rightImage.width,rightImage.height -90);
+    text("You have " + availableMoney + " $ ", width - rightImage.width,  rightImage.height+30);
     console.log("width", width/5)
     
     // create an invisible rectangle on top of the corner image
