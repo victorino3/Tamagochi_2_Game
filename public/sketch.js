@@ -13,9 +13,12 @@ let idea;
 let centerImg2;
 let centerImg1;
 let currentImg;
+let dirtyImg1;
 //
+let foodAlert = 10
 let availableMoney = 100;
 let showOverlay = false;
+let dirty=false
 let foods = ["banana 10$", "apple 10$", "orange 10$", "grapes 10$"];
 
 function preload() {
@@ -29,6 +32,7 @@ function preload() {
     idea = loadImage(pathImage+"idea.png");
     centerImg2 = loadImage(pathImage+"happy.png");
     rightImage = loadImage(pathImage+"coin.png");
+    dirtyImg1 =  loadImage(pathImage+"dirty.png");
     currentImg = centerImg1;
 }
 
@@ -62,13 +66,15 @@ function showNote() {
     removeElements() 
     background(bgImg);
     image(centerImg1, width/5 , height/3.5, centerImg1.width , centerImg1.height/2);
-    console.log("width", width/5)
     image(rightImage, width - rightImage.width,rightImage.height - 90);
     text("You have " + availableMoney + " $ ", width - rightImage.width, rightImage.height+30);
+    text("You have " + foodAlert + " % of food", width - rightImage.width, rightImage.height+50);
     
     // create an invisible rectangle on top of the corner image
     //Top
+    fill("white");
     rect(5, 0, cornerImg.width, cornerImg.height);
+    
     image(cornerImg, 5, 0);
 
     rect( cornerImg.width + 50 , 0, shower.width, shower.height);
@@ -93,18 +99,24 @@ function showNote() {
     document.getElementById('defaultCanvas0').addEventListener("mousedown", changeCenterImg);
   }
 function showNoteTochange(centerImg12) {
+  console.log("Entrou")
     removeElements() 
+    push()
     background(bgImg);
     image(centerImg12, width/5 , height/3.5, centerImg12.width , centerImg12.height/2);
-    image(rightImage, width - rightImage.width,rightImage.height -90);
-    text("You have " + availableMoney + " $ ", width - rightImage.width,  rightImage.height+30);
-    console.log("width", width/5)
+    pop()
     
     // create an invisible rectangle on top of the corner image
     //Top
+    fill("white");
     rect(5, 0, cornerImg.width, cornerImg.height);
     image(cornerImg, 5, 0);
-
+    image(rightImage, width - rightImage.width,rightImage.height -90);
+  
+    text("You have " + availableMoney + " $ ", width - rightImage.width,  rightImage.height+30);
+    text("You have " + foodAlert + " % of food", width - rightImage.width, rightImage.height+50);
+   
+    fill("white");
     rect( cornerImg.width + 50 , 0, shower.width, shower.height);
     image(shower, cornerImg.width + 50 , 0);
 
@@ -120,13 +132,17 @@ function showNoteTochange(centerImg12) {
 
     rect(score.width * 2.5, height - idea.height, idea.width, idea.height);
     image(idea, score.width * 2.5, height - idea.height);
+  
     //play
-    //checkCornerClickFood()
-    //checkShowerClickShower()
-    //checkMedicineClickMedicine()
-    //checkBottomLeftClickStats()
-    //checkScoreClickScore()
+    push()
+    checkCornerClickFood()
+    checkShowerClickShower()
+    checkMedicineClickMedicine()
+    checkBottomLeftClickStats()
+    checkScoreClickScore()
     checkJogarClickJogar()
+    pop()
+    //noFill();
 }
 
 function draw() {
@@ -153,6 +169,7 @@ function draw() {
       button.mousePressed(buy);
     }
     
+    
     // create "Back" button
     let backButton = createButton("Back");
     backButton.position(width/2, height/2 + 75);
@@ -165,12 +182,13 @@ function draw() {
 function removeOverlay() {
   showOverlay = false
   changeCenterImgTama()
-  console.log("Voltar")
+ 
   
 }
 function buy() {
   if (availableMoney > 9) {
     availableMoney -= 10
+    foodAlert += 10
   } 
 }
 
@@ -179,27 +197,45 @@ function showMessage() {
 }
 
 function changeCenterImg() {
-  checkCornerClickFood()
+  
   //checkShowerClickShower()
   //checkMedicineClickMedicine()
   //checkBottomLeftClickStats()
   //checkScoreClickScore()
  // checkJogarClickJogar()
   // change the current image
-  pop()
-  if (currentImg === centerImg1) {
+
+  if(dirty) {
+    currentImg = dirtyImg1
+  }
+  /*if (currentImg === centerImg1) {
     currentImg = centerImg2;
   } else {
     currentImg = centerImg1;
-  }
+  }*/
   //clear();
   image(currentImg, width/5 , height/3.5, currentImg.width , currentImg.height/2);
   showNoteTochange(currentImg)
-  push()
+
 }
 function changeCenterImgTama() {
   checkCornerClickFood()
-  //checkShowerClickShower()
+  checkShowerClickShower()
+  checkMedicineClickMedicine()
+  checkBottomLeftClickStats()
+  checkScoreClickScore()
+  checkJogarClickJogar()
+  // change the current image
+
+ 
+  currentImg = centerImg1;
+  //clear();
+  image(currentImg, width/5 , height/3.5, currentImg.width , currentImg.height/2);
+  showNoteTochange(currentImg)
+ 
+}
+/*function changeCenterImgDirty() {
+  checkShowerClickShower()
   //checkMedicineClickMedicine()
   //checkBottomLeftClickStats()
   //checkScoreClickScore()
@@ -207,20 +243,33 @@ function changeCenterImgTama() {
   // change the current image
   pop()
  
-  currentImg = centerImg1;
+  currentImg = dirtyImg1;
   //clear();
   image(currentImg, width/5 , height/3.5, currentImg.width , currentImg.height/2);
   showNoteTochange(currentImg)
+  console.log("Hello")
   push()
-}
+}*/
 function checkCornerClickFood() {
   // check if mouse click is within the rectangle of the corner image
   if (mouseX >= 0 && mouseX <= cornerImg.width && mouseY >= 0 && mouseY <= cornerImg.height) {
     // mouse click is within the rectangle
-    showMessage();
-    showOverlay = true;
+    if (foodAlert > 0) {
+      dirty = true
+      eatScore();
+      
+    } else {
+      showOverlay = true;
+    }
+    
   }
 }
+
+function eatScore() {
+  foodAlert -= 10
+}
+
+  
 
 
 
