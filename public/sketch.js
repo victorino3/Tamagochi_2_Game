@@ -18,6 +18,7 @@ let score;
 let idea; 
 let sleep;
 let sleepy;
+let timeouts;
 let messageTimeout;
 let message = "Não disponível"
 let lastClickTime = 0;
@@ -141,6 +142,7 @@ function mousePressed() {
     }else{
       showOverlay = true
     }
+    clearTimeout(timeouts);
     
   }
   else if (mouseX > cornerImg.width + 30 && mouseX < cornerImg.width + shower.width + 30 && mouseY > 0 && mouseY < shower.height) {
@@ -164,14 +166,16 @@ function mousePressed() {
     showNoteForSleep(centerImg1)
   }
   else if (mouseX > sleep.width + 50 && mouseX < sleep.width + 50 + score.width && mouseY > height - score.height && mouseY < height) {
-    console.log("score image clicked!");
+    showNoteForAwake(centerImg2)
+    clearTimeout(timeouts);
+    timeouts = setTimeout(resetCenterImage, 10000);
   }
   else if (mouseX > score.width * 2.5 && mouseX < score.width * 2.5 + idea.width && mouseY > height - idea.height && mouseY < height) {
     if (currentTime - lastClickTime > 10000) {
       if(availableMoney < 10 && foodAlert > 0){
         foodAlert-=3;
         availableMoney+= 8;
-      }else{
+      }else  if(availableMoney < 100 ) {
         availableMoney++;
       }
       
@@ -191,7 +195,10 @@ function removeMessage() {
   showNote()
 }
 
-
+function resetCenterImage() {
+  centerImg1 = sleepy;
+  showNoteForSleep(centerImg1)
+}
 
 
 function eatScore() {
@@ -220,7 +227,32 @@ function removeOverlay() {
 
 
 
+function showNoteForAwake(centerImg1){
+  removeElements()
+  background(bgImg);
+  image(centerImg1, width/5 , height/3.5, centerImg1.width , centerImg1.height/2);
+  
+  image(cornerImg, 0, 0);
 
+  image(rightImage, width - (rightImage.width + 50),rightImage.height - 90);
+  pop()
+  fill("black");
+  text("You have " + availableMoney + " $ ", width - (rightImage.width + 50), rightImage.height+30);
+  text("You have " + foodAlert + " % of food", width -  (rightImage.width + 50), rightImage.height+50);
+  push()
+
+
+  image(shower, cornerImg.width + 30, 0);
+  image(medicine, shower.width * 2.5, 0);
+
+    
+  image(sleep, 5, height - sleep.height);
+
+  image(score, sleep.width + 50, height - sleep.height);
+
+  image(idea, score.width * 2.5, height - idea.height);
+
+}
 
 function showNoteForSleep(centerImg1){
   removeElements()
