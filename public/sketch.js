@@ -118,9 +118,9 @@ function showNote() {
   image(shower, cornerImg.width + 30, 0);
   image(medicine, shower.width * 2.5, 0);
   
-  image(stats, 5, height - stats.height);
+  image(sleep, 5, height - sleep.height);
 
-  image(score, stats.width + 50, height - stats.height);
+  image(score, sleep.width + 50, height - sleep.height);
 
   image(idea, score.width * 2.5, height - idea.height);
 
@@ -155,8 +155,8 @@ function mousePressed() {
     showNoteForTama(centerImg1)
   
   }
-  else   if (mouseX > 5 && mouseX < 5 + stats.width && mouseY > height - stats.height && mouseY < height) {
-    centerImg1 = sleep;
+  else   if (mouseX > 5 && mouseX < 5 + sleep.width && mouseY > height - sleep.height && mouseY < height) {
+    centerImg1 = sleepy;
     showNoteForSleep(centerImg1)
   }
 
@@ -193,114 +193,32 @@ function removeOverlay() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function showNoteForSleep(centerImg1){
   removeElements()
   background(bgImg);
-  image(centerImg1, width/2 , height/2, centerImg1.width , centerImg1.height/2);
+  image(centerImg1, width/5 , height/3.5, centerImg1.width , centerImg1.height/2);
   
   image(cornerImg, 0, 0);
 
-  image(rightImage, width - rightImage.width,rightImage.height - 90);
-  push()
-  fill("black");
-  text("You have " + availableMoney + " $ ", width - rightImage.width, rightImage.height+30);
-  text("You have " + foodAlert + " % of food", width - rightImage.width, rightImage.height+50);
+  image(rightImage, width - (rightImage.width + 50),rightImage.height - 90);
   pop()
+  fill("black");
+  text("You have " + availableMoney + " $ ", width - (rightImage.width + 50), rightImage.height+30);
+  text("You have " + foodAlert + " % of food", width -  (rightImage.width + 50), rightImage.height+50);
+  push()
 
 
   image(shower, cornerImg.width + 30, 0);
   image(medicine, shower.width * 2.5, 0);
 
     
-  image(stats, 5, height - stats.height);
+  image(sleep, 5, height - sleep.height);
 
-  image(score, stats.width + 50, height - stats.height);
+  image(score, sleep.width + 50, height - sleep.height);
 
   image(idea, score.width * 2.5, height - idea.height);
 
 }
-
-
-
-
-
-
-
-
-
 
 
 function showNoteForTama(centerImg1){
@@ -309,11 +227,11 @@ function showNoteForTama(centerImg1){
   image(centerImg1, width/5 , height/3.5, centerImg1.width , centerImg1.height/2);
   image(cornerImg, 0, 0);
 
-  image(rightImage, width - rightImage.width,rightImage.height - 90);
+  image(rightImage, width - (rightImage.width + 50),rightImage.height - 90);
   push()
   fill("black");
-  text("You have " + availableMoney + " $ ", width - rightImage.width, rightImage.height+30);
-  text("You have " + foodAlert + " % of food", width - rightImage.width, rightImage.height+50);
+  text("You have " + availableMoney + " $ ", width - (rightImage.width + 50), rightImage.height+30);
+  text("You have " + foodAlert + " % of food", width -  (rightImage.width + 50), rightImage.height+50);
   pop()
 
 
@@ -321,9 +239,9 @@ function showNoteForTama(centerImg1){
   image(medicine, shower.width * 2.5, 0);
 
     
-  image(stats, 5, height - stats.height);
+  image(sleep, 5, height - sleep.height);
 
-  image(score, stats.width + 50, height - stats.height);
+  image(score, sleep.width + 50, height - sleep.height);
 
   image(idea, score.width * 2.5, height - idea.height);
 
