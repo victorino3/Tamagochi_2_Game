@@ -18,6 +18,9 @@ let score;
 let idea; 
 let sleep;
 let sleepy;
+let messageTimeout;
+let message = "Não disponível"
+let lastClickTime = 0;
 let foods = ["banana 10$", "apple 10$", "orange 10$", "grapes 10$"];
 
 
@@ -127,7 +130,8 @@ function showNote() {
  
 }
 
-function mousePressed() {
+function mousePressed() { 
+  let currentTime = millis();
   if (mouseX > 0 && mouseX < cornerImg.width && mouseY > 0 && mouseY < cornerImg.height) {
     if(foodAlert > 0){   
       centerImg1 = newCenterImg;
@@ -155,11 +159,36 @@ function mousePressed() {
     showNoteForTama(centerImg1)
   
   }
-  else   if (mouseX > 5 && mouseX < 5 + sleep.width && mouseY > height - sleep.height && mouseY < height) {
+  else if (mouseX > 5 && mouseX < 5 + sleep.width && mouseY > height - sleep.height && mouseY < height) {
     centerImg1 = sleepy;
     showNoteForSleep(centerImg1)
   }
+  else if (mouseX > sleep.width + 50 && mouseX < sleep.width + 50 + score.width && mouseY > height - score.height && mouseY < height) {
+    console.log("score image clicked!");
+  }
+  else if (mouseX > score.width * 2.5 && mouseX < score.width * 2.5 + idea.width && mouseY > height - idea.height && mouseY < height) {
+    if (currentTime - lastClickTime > 10000) {
+      if(availableMoney < 10 && foodAlert > 0){
+        foodAlert-=3;
+        availableMoney+= 8;
+      }else{
+        availableMoney++;
+      }
+      
+      lastClickTime = currentTime;
+    } else {
+      textAlign(CENTER);
+      textSize(20);
+      text(message, width/2, height/2);
+      clearTimeout(messageTimeout);
+      messageTimeout = setTimeout(removeMessage, 1000);
+    }
+  }
+}
 
+function removeMessage() {
+  clear();
+  showNote()
 }
 
 
