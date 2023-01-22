@@ -23,6 +23,8 @@ let messageTimeout;
 let message = "Não disponível"
 let lastClickTime = 0;
 let foods = ["banana 10$", "apple 10$", "orange 10$", "grapes 10$"];
+let username;
+let password;
 
 
 function preload() {
@@ -175,8 +177,10 @@ function mousePressed() {
       if(availableMoney < 10 && foodAlert > 0){
         foodAlert-=3;
         availableMoney+= 8;
+        updateUserValues(username, password,availableMoney,foodAlert)
       }else  if(availableMoney < 100 ) {
         availableMoney++;
+        updateUserValues(username, password,availableMoney,foodAlert)
       }
       
       lastClickTime = currentTime;
@@ -203,11 +207,13 @@ function resetCenterImage() {
 
 function eatScore() {
   foodAlert -= 10
+  updateUserValues(username, password,availableMoney,foodAlert)
 }
 function buy() {
   if (availableMoney > 9) {
     availableMoney -= 10
     foodAlert += 10
+    updateUserValues(username, password,availableMoney,foodAlert)
   } 
 }
 function removeOverlay() {
@@ -216,16 +222,6 @@ function removeOverlay() {
   centerImg1 = centerImg2;
   showNoteForTama(centerImg1)
 }
-
-
-
-
-
-
-
-
-
-
 
 function showNoteForAwake(centerImg1){
   removeElements()
@@ -307,3 +303,65 @@ function showNoteForTama(centerImg1){
   image(idea, score.width * 2.5, height - idea.height);
 
 }
+
+function Register() {
+  let username = inputun.value();
+  let password = inputpass.value();
+  if(!username || !password) {
+    alert("Username and Passowrd is required")
+  }else{
+    checkUsernameTOregister(username,password,imagem)
+  }
+}
+
+function login() {
+  let username = usernameInput.value();
+  let password = passwordInput.value();
+  removeElements();
+  if(!username || !password) {
+    alert("Email e Senha são obrigatório")
+  }else {
+    checkUsername(username, password,availableMoney,foodAlert)
+  }
+}
+
+function checkUsername(username, password,availableMoney,foodAlert){
+  let data = {
+    username,
+    password,
+    availableMoney,
+    foodAlert
+    }
+    httpPost("/login","json",data,(response)=>{
+      console.log("From response Login"+response)
+      
+       
+    }) 
+} 
+
+function checkUsernameTOregister(username, password,availableMoney,foodAlert) {
+  let data = {
+  username,
+  password,
+  availableMoney,
+  foodAlert
+  }
+
+  httpPost("/register","json",data,(response)=>{
+    console.log("From response "+response)
+  })  
+}
+function updateUserValues(username, password,availableMoney,foodAlert) {
+  let data = {
+  username,
+  password,
+  availableMoney,
+  foodAlert
+  }
+
+  httpPost("/values/update","json",data,(response)=>{
+    console.log("From response "+response)
+  })  
+}
+
+
