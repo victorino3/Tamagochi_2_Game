@@ -27,6 +27,8 @@ let username;
 let password;
 let passwordInput;
 let usernameInput;
+let moneyTodb= 0
+let foodTodb = 0
 
 
 function preload() {
@@ -144,6 +146,7 @@ function mousePressed() {
       console.log(centerImg1)
       eatScore()
       showNote();
+      updateUserValues(username, password,moneyTodb,foodTodb)
     }else{
       showOverlay = true
     }
@@ -156,6 +159,7 @@ function mousePressed() {
     if(imagedb == 1){
       centerImg1 = happy;
       showNoteForTama(centerImg1)
+      updateUserValues(username, password,moneyTodb,foodTodb)
     }else{
       centerImg1 = centerImg2;
       showNoteForTama(centerImg1)
@@ -164,26 +168,29 @@ function mousePressed() {
   }else  if (mouseX > shower.width * 2.5 && mouseX < shower.width * 2.5 + medicine.width && mouseY > 0 && mouseY < medicine.height) {
     centerImg1 = happy;
     showNoteForTama(centerImg1)
+    updateUserValues(username, password,moneyTodb,foodTodb)
   
   }
   else if (mouseX > 5 && mouseX < 5 + sleep.width && mouseY > height - sleep.height && mouseY < height) {
     centerImg1 = sleepy;
     showNoteForSleep(centerImg1)
+    updateUserValues(username, password,moneyTodb,foodTodb)
   }
   else if (mouseX > sleep.width + 50 && mouseX < sleep.width + 50 + score.width && mouseY > height - score.height && mouseY < height) {
     showNoteForAwake(centerImg2)
     clearTimeout(timeouts);
     timeouts = setTimeout(resetCenterImage, 10000);
+    updateUserValues(username, password,moneyTodb,foodTodb)
   }
   else if (mouseX > score.width * 2.5 && mouseX < score.width * 2.5 + idea.width && mouseY > height - idea.height && mouseY < height) {
     if (currentTime - lastClickTime > 10000) {
       if(availableMoney < 10 && foodAlert > 0){
         foodAlert-=3;
         availableMoney+= 8;
-        updateUserValues(username, password,availableMoney,foodAlert)
+        updateUserValues(username, password,moneyTodb,foodTodb)
       }else  if(availableMoney < 100 ) {
         availableMoney++;
-        updateUserValues(username, password,availableMoney,foodAlert)
+        updateUserValues(username, password,moneyTodb,foodTodb)
       }
       
       lastClickTime = currentTime;
@@ -210,13 +217,16 @@ function resetCenterImage() {
 
 function eatScore() {
   foodAlert -= 10
-  updateUserValues(username, password,availableMoney,foodAlert)
+  foodTodb = foodAlert;
+  updateUserValues(username, password,moneyTodb,foodTodb)
 }
 function buy() {
   if (availableMoney > 9) {
     availableMoney -= 10
+    moneyTodb = availableMoney
     foodAlert += 10
-    updateUserValues(username, password,availableMoney,foodAlert)
+    foodTodb = foodAlert;
+    updateUserValues(username, password,moneyTodb,foodTodb)
   } 
 }
 function removeOverlay() {
@@ -315,7 +325,7 @@ function Register() {
   }else{
     try {
       
-      let result = checkUsernameTOregister(username, password,availableMoney,foodAlert)
+      let result = checkUsernameTOregister(username, password,moneyTodb,foodTodb)
       console.log("VVVVV "+result)
       if (result === true || result === undefined) {
         showNote()
@@ -339,7 +349,7 @@ function login() {
     alert("Email e Senha são obrigatório")
   }else {
     try {
-      let result = checkUsername(username, password,availableMoney,foodAlert)
+      let result = checkUsername(username, password,moneyTodb,foodTodb)
       console.log("VVVVV "+result)
       if (result === true || result === undefined ) {
         showNote()
@@ -356,12 +366,12 @@ function login() {
   }
 }
 
-function checkUsername(username, password,availableMoney,foodAlert){
+function checkUsername(username, password,moneyTodb,foodTodb){
   let data = {
     username,
     password,
-    availableMoney,
-    foodAlert
+    moneyTodb,
+    foodTodb
     }
     console.log("Entrei login aqui")
     httpPost("/login","json",data,(response)=>{
@@ -375,13 +385,14 @@ function checkUsername(username, password,availableMoney,foodAlert){
     }) 
 } 
 
-function checkUsernameTOregister(username, password,availableMoney,foodAlert) {
+function checkUsernameTOregister(username, password,moneyTodb,foodTodb) {
   let data = {
   username,
   password,
-  availableMoney,
-  foodAlert
+  moneyTodb,
+  foodTodb
   }
+  console.log(data)
   console.log("Entrei register aqui")
   httpPost("/register","json",data,(response)=>{
     if ( typeof response === Object) {
@@ -393,14 +404,14 @@ function checkUsernameTOregister(username, password,availableMoney,foodAlert) {
      
   }) 
 }
-function updateUserValues(username, password,availableMoney,foodAlert) {
+function updateUserValues(username, password,moneyTodb,foodTodb) {
   let data = {
   username,
   password,
-  availableMoney,
-  foodAlert
+  moneyTodb,
+  foodTodb
   }
-
+  console.log(data)
   httpPost("/values/update","json",data,(response)=>{
     console.log("From response "+response)
   })  

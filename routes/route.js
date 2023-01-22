@@ -27,8 +27,8 @@ router.post('/login',(req,res)=>{
 router.post('/register', (req,res)=>{
     const email = req.body.username
     const password = req.body.password
-    const availableMoney =  req.body.availableMoney
-    const foodAlert =  req.body.foodAlert
+    const availableMoney =  req.body.moneyTodb
+    const foodAlert =  req.body.foodTodb
     dbase.query('INSERT INTO user (email, password, availableMoney,foodAlert) VALUES(?, ?, ?,?)',
     [email, password,availableMoney,foodAlert ],(error,results) => {
        if (error) return res.json({ error: error });
@@ -39,12 +39,12 @@ router.post('/register', (req,res)=>{
 router.post("/values/update",(req,res)=>{
     const email = req.body.username
     const password = req.body.password
-    const availableMoney =  req.body.availableMoney
-    const foodAlert =  req.body.foodAlert
+    const availableMoney =  req.body.moneyTodb
+    const foodAlert =  req.body.foodTodb
     const id = saveSessionId
-    console.log(id)
-    dbase.query('REPLACE INTO user (id, email, password, availableMoney,foodAlert) VALUES(?, ?, ?, ?,?)', 
-    [id, email, password,availableMoney,foodAlert ],(error,results) => {
+    console.log(req.body.moneyTodb, "----", req.body.foodTodb )
+    dbase.query('UPDATE user SET availableMoney = ?, foodAlert = ? WHERE id = ?;', 
+    [id,availableMoney,foodAlert ],(error,results) => {
         if (error) return res.json({ error: error });
         res.send(results)
     });
@@ -54,7 +54,7 @@ router.post("/values/update",(req,res)=>{
 //let sql = "INSERT INTO imagerandom (`image`,`name`) VALUES ('"+image_path+"','"+name+"');";
 router.get('/getdata',(req,res)=>{
     dbase.query(
-        'SELECT * FROM `stratergy` WHERE `id` = ?',
+        'SELECT * FROM `user` WHERE `id` = ?',
         [saveSessionId],
         function(err, results) {
          let [image] = results
