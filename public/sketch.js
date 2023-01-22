@@ -54,21 +54,21 @@ function setup() {
   // create input field for username
   let usernameInput = createInput();
   usernameInput.position(width/2 - usernameInput.width/2, height/2 - 100);
-  usernameInput.attribute("placeholder", "Username");
+  usernameInput.attribute("placeholder", "Email");
 
   // create input field for password
   let passwordInput = createInput();
   passwordInput.position(width/2 - passwordInput.width/2, height/2 - 50);
   passwordInput.attribute("placeholder", "Password");
-  passwordInput.attribute("type", "password");
+  passwordInput.attribute("type", "Senha");
 
   // create submit button
-  let submitBtn = createButton("Submit");
+  let submitBtn = createButton("Entrar");
   submitBtn.position(width/2 - submitBtn.width/2 - 50, height/2);
   submitBtn.mousePressed(showNote);
 
   // create info button
-  let infoBtn = createButton("Info");
+  let infoBtn = createButton("Registrar");
   infoBtn.position(width/2 - submitBtn.width/2 + 50, height/2);
 }
 
