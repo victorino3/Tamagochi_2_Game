@@ -29,8 +29,8 @@ router.post('/register', (req,res)=>{
     const password = req.body.password
     const availableMoney =  req.body.availableMoney
     const foodAlert =  req.body.foodAlert
-    dbase.query('INSERT INTO user (id, email, password, availableMoney,foodAlert) VALUES(?, ?, ?, ?,?)',
-    [id, email, password,availableMoney,foodAlert ],(error,results) => {
+    dbase.query('INSERT INTO user (email, password, availableMoney,foodAlert) VALUES(?, ?, ?,?)',
+    [email, password,availableMoney,foodAlert ],(error,results) => {
        if (error) return res.json({ error: error });
        res.send(results)
        });
@@ -42,6 +42,7 @@ router.post("/values/update",(req,res)=>{
     const availableMoney =  req.body.availableMoney
     const foodAlert =  req.body.foodAlert
     const id = saveSessionId
+    console.log(id)
     dbase.query('REPLACE INTO user (id, email, password, availableMoney,foodAlert) VALUES(?, ?, ?, ?,?)', 
     [id, email, password,availableMoney,foodAlert ],(error,results) => {
         if (error) return res.json({ error: error });

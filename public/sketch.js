@@ -25,6 +25,8 @@ let lastClickTime = 0;
 let foods = ["banana 10$", "apple 10$", "orange 10$", "grapes 10$"];
 let username;
 let password;
+let passwordInput;
+let usernameInput;
 
 
 function preload() {
@@ -54,12 +56,12 @@ function setup() {
 
 
   // create input field for username
-  let usernameInput = createInput();
+  usernameInput = createInput();
   usernameInput.position(width/2 - usernameInput.width/2, height/2 - 100);
   usernameInput.attribute("placeholder", "Email");
 
   // create input field for password
-  let passwordInput = createInput();
+  passwordInput = createInput();
   passwordInput.position(width/2 - passwordInput.width/2, height/2 - 50);
   passwordInput.attribute("placeholder", "Password");
   passwordInput.attribute("type", "Senha");
@@ -67,11 +69,12 @@ function setup() {
   // create submit button
   let submitBtn = createButton("Entrar");
   submitBtn.position(width/2 - submitBtn.width/2 - 50, height/2);
-  submitBtn.mousePressed(showNote);
+  submitBtn.mousePressed(login);
 
   // create info button
   let infoBtn = createButton("Registrar");
   infoBtn.position(width/2 - submitBtn.width/2 + 50, height/2);
+  infoBtn.mousePressed(Register);
 }
 
 
@@ -305,23 +308,51 @@ function showNoteForTama(centerImg1){
 }
 
 function Register() {
-  let username = inputun.value();
-  let password = inputpass.value();
+  let username = usernameInput.value();
+  let password = passwordInput.value();
   if(!username || !password) {
     alert("Username and Passowrd is required")
   }else{
-    checkUsernameTOregister(username,password,imagem)
+    try {
+      
+      let result = checkUsernameTOregister(username, password,availableMoney,foodAlert)
+      console.log("VVVVV "+result)
+      if (result === true || result === undefined) {
+        showNote()
+      } else {
+        alert("Email e Senha estão incorretos")
+        return
+      }
+     
+      
+    } catch (error) {
+      return error
+    }
+  
   }
 }
 
 function login() {
   let username = usernameInput.value();
   let password = passwordInput.value();
-  removeElements();
   if(!username || !password) {
     alert("Email e Senha são obrigatório")
   }else {
-    checkUsername(username, password,availableMoney,foodAlert)
+    try {
+      let result = checkUsername(username, password,availableMoney,foodAlert)
+      console.log("VVVVV "+result)
+      if (result === true || result === undefined ) {
+        showNote()
+      } else {
+        alert("Email e Senha estão incorretos")
+        return
+      }
+     
+    } catch (error) {
+      return error
+    }
+   
+    
   }
 }
 
@@ -332,8 +363,13 @@ function checkUsername(username, password,availableMoney,foodAlert){
     availableMoney,
     foodAlert
     }
+    console.log("Entrei login aqui")
     httpPost("/login","json",data,(response)=>{
-      console.log("From response Login"+response)
+      if ( typeof response === Object) {
+        return true
+      } else {
+        return false
+      }
       
        
     }) 
@@ -346,10 +382,16 @@ function checkUsernameTOregister(username, password,availableMoney,foodAlert) {
   availableMoney,
   foodAlert
   }
-
+  console.log("Entrei register aqui")
   httpPost("/register","json",data,(response)=>{
-    console.log("From response "+response)
-  })  
+    if ( typeof response === Object) {
+      return true
+    } else {
+      return false
+    }
+    
+     
+  }) 
 }
 function updateUserValues(username, password,availableMoney,foodAlert) {
   let data = {
