@@ -9,8 +9,6 @@ let shower;
 let happy;
 let showOverlay = false;
 let pathImage = "image/";
-let foodAlert = 10
-let availableMoney = 100;
 let medicine;
 let myArray=[]
 let stats;
@@ -27,8 +25,13 @@ let username;
 let password;
 let passwordInput;
 let usernameInput;
-let moneyTodb= 0
-let foodTodb = 0
+let moneyTodb=0
+let foodTodb =0
+let initialFood = 0
+let initialMoney = 0
+let foodAlert;
+let availableMoney;
+let verify = false
 
 
 function preload() {
@@ -56,7 +59,6 @@ function setup() {
   createCanvas(1000, 1000);
   background(153,217,234);
 
-
   // create input field for username
   usernameInput = createInput();
   usernameInput.position(width/2 - usernameInput.width/2, height/2 - 100);
@@ -77,6 +79,7 @@ function setup() {
   let infoBtn = createButton("Registrar");
   infoBtn.position(width/2 - submitBtn.width/2 + 50, height/2);
   infoBtn.mousePressed(Register);
+
 }
 
 
@@ -114,6 +117,7 @@ function draw() {
 }
 
 function showNote() {
+  
   removeElements()
   background(bgImg);
   image(centerImg1, width/5 , height/3.5, centerImg1.width , centerImg1.height/2);
@@ -184,15 +188,20 @@ function mousePressed() {
   }
   else if (mouseX > score.width * 2.5 && mouseX < score.width * 2.5 + idea.width && mouseY > height - idea.height && mouseY < height) {
     if (currentTime - lastClickTime > 10000) {
-      if(availableMoney < 10 && foodAlert > 0){
-        foodAlert-=3;
-        availableMoney+= 8;
-        updateUserValues(username, password,moneyTodb,foodTodb)
-      }else  if(availableMoney < 100 ) {
-        availableMoney++;
+      if(availableMoney < 10){
+        availableMoney+= 10;
+        moneyTodb = availableMoney
         updateUserValues(username, password,moneyTodb,foodTodb)
       }
-      
+      else if (foodAlert > 10) {
+        foodAlert -= 5
+        foodTodb = foodAlert
+        updateUserValues(username, password,moneyTodb,foodTodb)
+      }else {
+        availableMoney++;
+        moneyTodb = availableMoney
+        updateUserValues(username, password,moneyTodb,foodTodb)
+      }
       lastClickTime = currentTime;
     } else {
       textAlign(CENTER);
@@ -227,7 +236,9 @@ function buy() {
     foodAlert += 10
     foodTodb = foodAlert;
     updateUserValues(username, password,moneyTodb,foodTodb)
-  } 
+  } else{
+    alert("Dinheiro insuficiente")
+  }
 }
 function removeOverlay() {
   showOverlay = false
@@ -352,7 +363,14 @@ function login() {
       let result = checkUsername(username, password,moneyTodb,foodTodb)
       console.log("VVVVV "+result)
       if (result === true || result === undefined ) {
-        showNote()
+        getdata()
+        if(verify){
+          foodAlert = initialFood
+          availableMoney = initialMoney
+          console.log("initial values from log " +initialFood,initialMoney)
+          showNote()
+        }
+        
       } else {
         alert("Email e Senha estão incorretos")
         return
@@ -416,5 +434,27 @@ function updateUserValues(username, password,moneyTodb,foodTodb) {
     console.log("From response "+response)
   })  
 }
+
+function getdata() {
+  loadJSON('/getdata',(response)=>{
+    let result = response
+    console.log("Data come from back "+JSON.stringify(response))
+
+    initialFood = result.message.foodAlert
+    initialMoney = result.message.availableMoney
+    verify = true
+    
+   
+    //console.log("initial values from get " +initialFood,initialMoney)
+
+   
+    })
+}
+//create function that calculate two value  in js
+
+
+
+
+
 
 
