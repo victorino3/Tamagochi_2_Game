@@ -1,8 +1,6 @@
 import {dbase} from "../server/connection.js"
-import express, { response } from "express"
+import express from "express"
 import {fileURLToPath} from 'url';
-import { join } from "path"
-import fs from "fs"
 import path from 'path';
 const router = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -11,12 +9,11 @@ let saveSessionId = 0
 
 //get all user in db
 router.post('/login',(req,res)=>{
-    const name = req.body.username;
+    const email = req.body.username;
     const password = req.body.password;
-    console.log(name,password)
     dbase.query(
-        'SELECT * FROM `userprops` WHERE `name` = ? AND `password` = ?',
-        [name, password],
+        'SELECT * FROM `user` WHERE `email` = ? AND `password` = ?',
+        [email, password],
         function(err, results) {
          let [image] = results
          saveSessionId = image.id
@@ -28,25 +25,25 @@ router.post('/login',(req,res)=>{
 })
 
 router.post('/register', (req,res)=>{
-    const username = req.body.username
+    const email = req.body.username
     const password = req.body.password
-    const imageX = req.body.imagem
-    const imagem = imageX.replace("image/","")
-    console.log(username,password,imagem)
-    dbase.query('INSERT INTO userprops (name, password, image) VALUES(?,?,?)',
-    [username, password, imagem],(error,results) => {
+    const availableMoney =  req.body.availableMoney
+    const foodAlert =  req.body.foodAlert
+    dbase.query('INSERT INTO user (id, email, password, availableMoney,foodAlert) VALUES(?, ?, ?, ?,?)',
+    [id, email, password,availableMoney,foodAlert ],(error,results) => {
        if (error) return res.json({ error: error });
        res.send(results)
        });
 })
 
-router.post("/upload/startergy/all",(req,res)=>{
-    const feed = req.body.bothScoreFeed
-    const shower = req.body.bothScoreShower
-    const life =  req.body.bothScoreLife
+router.post("/values/update",(req,res)=>{
+    const email = req.body.username
+    const password = req.body.password
+    const availableMoney =  req.body.availableMoney
+    const foodAlert =  req.body.foodAlert
     const id = saveSessionId
-    dbase.query('REPLACE INTO stratergy (id, feed, shower, life) VALUES(?, ?, ?, ?)', 
-    [id, feed, shower,life ],(error,results) => {
+    dbase.query('REPLACE INTO user (id, email, password, availableMoney,foodAlert) VALUES(?, ?, ?, ?,?)', 
+    [id, email, password,availableMoney,foodAlert ],(error,results) => {
         if (error) return res.json({ error: error });
         res.send(results)
     });
