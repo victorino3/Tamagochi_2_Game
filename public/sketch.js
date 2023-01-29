@@ -339,7 +339,12 @@ function Register() {
       let result = checkUsernameTOregister(username, password,moneyTodb,foodTodb)
       console.log("VVVVV "+result)
       if (result === true || result === undefined) {
-        showNote()
+        if(verify){
+          foodAlert = initialFood
+          availableMoney = initialMoney
+          console.log("initial values from log " +initialFood,initialMoney)
+          showNote()
+        }
       } else {
         alert("Email e Senha estão incorretos")
         return
