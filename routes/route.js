@@ -15,9 +15,14 @@ router.post('/login',(req,res)=>{
         'SELECT * FROM `user` WHERE `email` = ? AND `password` = ?',
         [email, password],
         function(err, results) {
-         let [image] = results
-         saveSessionId = image.id
-         res.json({message:image.image})
+            if (results.length > 0) {
+                let [image] = results
+                saveSessionId = image.id
+                res.json({message:true})
+            } else {
+                res.json({message:false})
+            }
+         
         }
        
       );
@@ -65,4 +70,6 @@ router.get('/getdata',(req,res)=>{
       );
       
 })
+
+
 export {router}

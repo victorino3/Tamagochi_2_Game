@@ -29,8 +29,8 @@ let moneyTodb=0
 let foodTodb =0
 let initialFood = 0
 let initialMoney = 0
-let foodAlert;
-let availableMoney;
+let foodAlert=100
+let availableMoney=100
 let verify = false
 
 
@@ -79,6 +79,8 @@ function setup() {
   let infoBtn = createButton("Registrar");
   infoBtn.position(width/2 - submitBtn.width/2 + 50, height/2);
   infoBtn.mousePressed(Register);
+  foodAlert = initialFood ? initialFood : 100
+  availableMoney = initialMoney ? initialMoney : 100
 
 }
 
@@ -335,22 +337,10 @@ function Register() {
     alert("Username and Passowrd is required")
   }else{
     try {
-      
-      let result = checkUsernameTOregister(username, password,moneyTodb,foodTodb)
-      console.log("VVVVV "+result)
-      if (result === true || result === undefined) {
-        if(verify){
-          foodAlert = initialFood
-          availableMoney = initialMoney
-          console.log("initial values from log " +initialFood,initialMoney)
-          showNote()
-        }
-      } else {
-        alert("Email e Senha estão incorretos")
-        return
-      }
-     
-      
+      moneyTodb = availableMoney
+      foodTodb = foodAlert
+      checkUsernameTOregister(username, password,moneyTodb,foodTodb)
+      showNote()       
     } catch (error) {
       return error
     }
@@ -364,29 +354,11 @@ function login() {
   if(!username || !password) {
     alert("Email e Senha são obrigatório")
   }else {
-    try {
-      let result = checkUsername(username, password,moneyTodb,foodTodb)
-      console.log("VVVVV "+result)
-      if (result === true || result === undefined ) {
-        getdata()
-        if(verify){
-          foodAlert = initialFood
-          availableMoney = initialMoney
-          console.log("initial values from log " +initialFood,initialMoney)
-          showNote()
-        }
-        
-      } else {
-        alert("Email e Senha estão incorretos")
-        return
-      }
-     
-    } catch (error) {
-      return error
-    }
-   
     
-  }
+      checkUsername(username, password,moneyTodb,foodTodb) 
+      
+    }
+  
 }
 
 function checkUsername(username, password,moneyTodb,foodTodb){
@@ -396,16 +368,17 @@ function checkUsername(username, password,moneyTodb,foodTodb){
     moneyTodb,
     foodTodb
     }
-    console.log("Entrei login aqui")
-    httpPost("/login","json",data,(response)=>{
-      if ( typeof response === Object) {
-        return true
+    httpPost("/login","json",data,(response)=>{    
+      console.log(response)
+      if ( response.message == true ) {
+        getdata()
+        showNote()
       } else {
-        return false
-      }
-      
+        alert("Utilizador não encontrado! Faça um novo registro")
+      }   
        
     }) 
+  
 } 
 
 function checkUsernameTOregister(username, password,moneyTodb,foodTodb) {
@@ -418,12 +391,8 @@ function checkUsernameTOregister(username, password,moneyTodb,foodTodb) {
   console.log(data)
   console.log("Entrei register aqui")
   httpPost("/register","json",data,(response)=>{
-    if ( typeof response === Object) {
-      return true
-    } else {
-      return false
-    }
     
+      return true   
      
   }) 
 }
@@ -440,22 +409,19 @@ function updateUserValues(username, password,moneyTodb,foodTodb) {
   })  
 }
 
+
+
 function getdata() {
   loadJSON('/getdata',(response)=>{
     let result = response
     console.log("Data come from back "+JSON.stringify(response))
 
-    initialFood = result.message.foodAlert
+    initialFood = result.message.foodAlert	
     initialMoney = result.message.availableMoney
-    verify = true
-    
-   
-    //console.log("initial values from get " +initialFood,initialMoney)
-
    
     })
 }
-//create function that calculate two value  in js
+
 
 
 
