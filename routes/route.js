@@ -47,13 +47,13 @@ router.post("/values/update",(req,res)=>{
     const availableMoney =  req.body.moneyTodb
     const foodAlert =  req.body.foodTodb
     const id = saveSessionId
-    console.log(req.body.moneyTodb, "----", req.body.foodTodb )
+    console.log(req.body.moneyTodb, "----", req.body.foodTodb, "----",id )
     dbase.query('UPDATE user SET availableMoney = ?, foodAlert = ? WHERE id = ?;', 
-    [id,availableMoney,foodAlert ],(error,results) => {
+    [availableMoney, foodAlert, id],(error,results) => {
         if (error) return res.json({ error: error });
         res.send(results)
     });
-
+    //
 })
 
 //let sql = "INSERT INTO imagerandom (`image`,`name`) VALUES ('"+image_path+"','"+name+"');";

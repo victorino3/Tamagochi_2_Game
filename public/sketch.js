@@ -152,6 +152,8 @@ function mousePressed() {
       console.log(centerImg1)
       eatScore()
       showNote();
+      moneyTodb = availableMoney
+      foodTodb = foodAlert
       updateUserValues(username, password,moneyTodb,foodTodb)
     }else{
       showOverlay = true
@@ -165,6 +167,8 @@ function mousePressed() {
     if(imagedb == 1){
       centerImg1 = happy;
       showNoteForTama(centerImg1)
+      moneyTodb = availableMoney
+      foodTodb = foodAlert
       updateUserValues(username, password,moneyTodb,foodTodb)
     }else{
       centerImg1 = centerImg2;
@@ -174,18 +178,24 @@ function mousePressed() {
   }else  if (mouseX > shower.width * 2.5 && mouseX < shower.width * 2.5 + medicine.width && mouseY > 0 && mouseY < medicine.height) {
     centerImg1 = happy;
     showNoteForTama(centerImg1)
+    moneyTodb = availableMoney
+    foodTodb = foodAlert
     updateUserValues(username, password,moneyTodb,foodTodb)
   
   }
   else if (mouseX > 5 && mouseX < 5 + sleep.width && mouseY > height - sleep.height && mouseY < height) {
     centerImg1 = sleepy;
     showNoteForSleep(centerImg1)
+    moneyTodb = availableMoney
+    foodTodb = foodAlert
     updateUserValues(username, password,moneyTodb,foodTodb)
   }
   else if (mouseX > sleep.width + 50 && mouseX < sleep.width + 50 + score.width && mouseY > height - score.height && mouseY < height) {
     showNoteForAwake(centerImg2)
     clearTimeout(timeouts);
     timeouts = setTimeout(resetCenterImage, 10000);
+    moneyTodb = availableMoney
+    foodTodb = foodAlert
     updateUserValues(username, password,moneyTodb,foodTodb)
   }
   else if (mouseX > score.width * 2.5 && mouseX < score.width * 2.5 + idea.width && mouseY > height - idea.height && mouseY < height) {
@@ -403,7 +413,7 @@ function updateUserValues(username, password,moneyTodb,foodTodb) {
   moneyTodb,
   foodTodb
   }
-  console.log(data)
+  console.log("sending ", data.toString())
   httpPost("/values/update","json",data,(response)=>{
     console.log("From response "+response)
   })  
